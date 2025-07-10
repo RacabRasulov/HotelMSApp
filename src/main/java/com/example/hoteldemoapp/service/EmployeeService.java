@@ -24,7 +24,7 @@ public class EmployeeService {
     }
 
 
-    public CreateEmployeeDtoResponse save(CreateEmployeeDtoRequest dtoRequest) {
+    public void save(CreateEmployeeDtoRequest dtoRequest) {
 
         EmployeeEntity entity = new EmployeeEntity();
         entity.setCreateAt(LocalDateTime.now());
@@ -52,7 +52,6 @@ public class EmployeeService {
         response.setSalary(dtoRequest.getSalary());
         response.setHireDate(dtoRequest.getHireDate());
 
-        return response;
     }
 
 
@@ -134,46 +133,46 @@ public class EmployeeService {
     }
 
 
-    public UpdateEmployeeDtoResponse update(UpdateEmployeeDtoRequest dtoRequest, Long id) {
+        public UpdateEmployeeDtoResponse update(UpdateEmployeeDtoRequest dtoRequest, Long id) {
 
-        Optional<EmployeeEntity> optionalEmployeeEntity = employeeRepository.
-                findById(id);
+            Optional<EmployeeEntity> optionalEmployeeEntity = employeeRepository.
+                    findById(id);
 
-        if (optionalEmployeeEntity.isEmpty()) {
-            throw new RuntimeException("Əməkdaş tapılmadı:ID" + id);
+            if (optionalEmployeeEntity.isEmpty()) {
+                throw new RuntimeException("Əməkdaş tapılmadı:ID" + id);
+
+            }
+
+            EmployeeEntity entity = optionalEmployeeEntity.get();
+
+            entity.setName(dtoRequest.getName());
+            entity.setSurname(dtoRequest.getSurname());
+            entity.setSalary(dtoRequest.getSalary());
+            entity.setHireDate(dtoRequest.getHireDate());
+            entity.setPosition(dtoRequest.getPosition());
+            entity.setBrithDate(dtoRequest.getBrithDate());
+            entity.setPassportSeriesAndNumber(dtoRequest.getPassportSeriesAndNumber());
+            entity.setAddress(dtoRequest.getAddress());
+
+
+            EmployeeEntity updateEntity = employeeRepository.save(entity);
+
+            UpdateEmployeeDtoResponse dtoResponse = new UpdateEmployeeDtoResponse();
+
+            dtoResponse.setName(updateEntity.getName());
+            dtoResponse.setSurname(updateEntity.getSurname());
+            dtoResponse.setSalary(updateEntity.getSalary());
+            dtoResponse.setHireDate(updateEntity.getHireDate());
+            dtoResponse.setPosition(updateEntity.getPosition());
+            dtoResponse.setBrithDate(updateEntity.getBrithDate());
+            dtoResponse.setPassportSeriesAndNumber(updateEntity.getPassportSeriesAndNumber());
+            dtoResponse.setAddress(updateEntity.getAddress());
+
+
+            return dtoResponse;
+
 
         }
-
-        EmployeeEntity entity = optionalEmployeeEntity.get();
-
-        entity.setName(dtoRequest.getName());
-        entity.setSurname(dtoRequest.getSurname());
-        entity.setSalary(dtoRequest.getSalary());
-        entity.setHireDate(dtoRequest.getHireDate());
-        entity.setPosition(dtoRequest.getPosition());
-        entity.setBrithDate(dtoRequest.getBrithDate());
-        entity.setPassportSeriesAndNumber(dtoRequest.getPassportSeriesAndNumber());
-        entity.setAddress(dtoRequest.getAddress());
-
-
-        EmployeeEntity updateEntity = employeeRepository.save(entity);
-
-        UpdateEmployeeDtoResponse dtoResponse = new UpdateEmployeeDtoResponse();
-
-        dtoResponse.setName(updateEntity.getName());
-        dtoResponse.setSurname(updateEntity.getSurname());
-        dtoResponse.setSalary(updateEntity.getSalary());
-        dtoResponse.setHireDate(updateEntity.getHireDate());
-        dtoResponse.setPosition(updateEntity.getPosition());
-        dtoResponse.setBrithDate(updateEntity.getBrithDate());
-        dtoResponse.setPassportSeriesAndNumber(updateEntity.getPassportSeriesAndNumber());
-        dtoResponse.setAddress(updateEntity.getAddress());
-
-
-        return dtoResponse;
-
-
-    }
 
 
 }
