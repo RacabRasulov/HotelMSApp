@@ -46,6 +46,18 @@ public class BookingEntity {
     private boolean babyCrib;
 
 
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updateAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updateAt = LocalDateTime.now();
+    }
+
+
     @ManyToOne
     @JoinColumn(name = "handled_by_id")
     private EmployeeEntity handleBy;

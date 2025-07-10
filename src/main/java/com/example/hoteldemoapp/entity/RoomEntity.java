@@ -34,7 +34,8 @@ public class RoomEntity {
     @OneToMany(mappedBy = "roomEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RoomFeatureEntity> features = new ArrayList<>();
 
+
     @OneToMany(mappedBy = "roomEntity", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MiniBarItemEntity> miniBarItems = new ArrayList<>();
+    private List<MiniBarStockEntity> miniBarStocks = new ArrayList<>();
 
 }
