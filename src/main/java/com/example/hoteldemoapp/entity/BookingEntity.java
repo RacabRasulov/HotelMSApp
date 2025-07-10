@@ -60,6 +60,10 @@ public class BookingEntity {
     @ManyToOne
     @JoinColumn(name = "room_id")
     private RoomEntity roomEntity;
+
+    @OneToMany(mappedBy = "bookingEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MiniBarUsageEntity> miniBarUsages = new ArrayList<>();
+
 }
 
 

@@ -11,19 +11,20 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Data
+@Table(name = "room_types")
 public class RoomTypeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
     private String name;
+
     @Column(nullable = false)
     private String description;
 
-    private BigDecimal priceWithBreakfast;
-    private BigDecimal priceWithoutBreakfast;
-    private BigDecimal extraBedPrice;
-    private BigDecimal babyCribPrice;
+    @OneToMany(mappedBy = "roomType", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RoomPrice> roomPrices;
 
     @OneToMany(mappedBy = "roomTypeEntity")
     private List<RoomEntity> roomEntities;

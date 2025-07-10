@@ -31,5 +31,10 @@ public class RoomEntity {
     @JoinColumn(name = "room_type_id")
     private RoomTypeEntity roomTypeEntity;
 
+    @OneToMany(mappedBy = "roomEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RoomFeatureEntity> features = new ArrayList<>();
+
+    @OneToMany(mappedBy = "roomEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MiniBarItemEntity> miniBarItems = new ArrayList<>();
 
 }
