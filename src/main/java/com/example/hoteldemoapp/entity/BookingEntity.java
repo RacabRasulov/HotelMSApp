@@ -31,8 +31,10 @@ public class BookingEntity {
     private LocalDate checkOutDate;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private BookingStatus status;
 
+    @Column(nullable = false)
     private BigDecimal totalPrice;
 
     @Column(nullable = false)
@@ -40,27 +42,29 @@ public class BookingEntity {
 
     private String notes;
     private LocalDateTime createdAt;
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt ;
     private boolean withBreakfast;
     private boolean extraBed;
     private boolean babyCrib;
 
 
+    @ManyToOne
+    @JoinColumn(name = "employee_id") // və ya istədiyin sütun adı
+    private EmployeeEntity handleBy;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
-        updateAt = LocalDateTime.now();
+        updatedAt  = LocalDateTime.now();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        updateAt = LocalDateTime.now();
+        updatedAt  = LocalDateTime.now();
     }
 
 
-    @ManyToOne
-    @JoinColumn(name = "handled_by_id")
-    private EmployeeEntity handleBy;
+
 
     @OneToMany(mappedBy = "bookingEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PaymentEntity> paymentEntities = new ArrayList<>();
@@ -75,6 +79,29 @@ public class BookingEntity {
 
     @OneToMany(mappedBy = "bookingEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MiniBarUsageEntity> miniBarUsages = new ArrayList<>();
+
+    public BigDecimal getTotalPaid() {
+        if (paymentEntities == null || paymentEntities.isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+        return paymentEntities.stream()
+                .map(PaymentEntity::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public boolean isFullyPaid() {
+        return getTotalPaid().compareTo(totalPrice) >= 0;
+    }
+
+    public boolean isCheckedOut() {
+        return this.status == BookingStatus.CHECKED_OUT;
+    }
+
+    public boolean isCustomerInDebt() {
+        return getTotalPaid().compareTo(totalPrice) < 0;
+    }
+
+
 
 }
 

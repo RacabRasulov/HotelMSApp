@@ -22,7 +22,7 @@ public class RoomEntity {
     @Column(nullable = false)
     private String roomNumber;
     private Boolean isAvailable;
-
+    private String note;
 
     @OneToMany(mappedBy = "roomEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BookingEntity> bookingEntities = new ArrayList<>();

@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Entity
@@ -22,12 +23,24 @@ public class MiniBarItemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private BigDecimal purchasePrice;
     private BigDecimal salePrice;
-    private int warehouseStock;
+    private String note;
 
+    @OneToMany(mappedBy = "miniBarItem")
+    private List<MiniBarPurchaseEntity> purchases;
     @OneToMany(mappedBy = "miniBarItemEntity")
-    private List<MiniBarStockEntity> miniBarStocks;
+    private List<MiniBarUsageEntity> usages;
+
+    @Transient
+    public BigDecimal getAveragePurchasePrice() {
+        if (purchases == null || purchases.isEmpty()) return BigDecimal.ZERO;
+        BigDecimal totalCost = purchases.stream()
+                .map(p -> p.getUnitPrice().multiply(BigDecimal.valueOf(p.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        int totalQuantity = purchases.stream().mapToInt(MiniBarPurchaseEntity::getQuantity).sum();
+        return totalQuantity == 0 ? BigDecimal.ZERO : totalCost.divide(BigDecimal.valueOf(totalQuantity), 2, RoundingMode.HALF_UP);
+    }
+
 
     public Long getId() {
         return id;
@@ -45,14 +58,6 @@ public class MiniBarItemEntity {
         this.name = name;
     }
 
-    public BigDecimal getPurchasePrice() {
-        return purchasePrice;
-    }
-
-    public void setPurchasePrice(BigDecimal purchasePrice) {
-        this.purchasePrice = purchasePrice;
-    }
-
     public BigDecimal getSalePrice() {
         return salePrice;
     }
@@ -61,19 +66,27 @@ public class MiniBarItemEntity {
         this.salePrice = salePrice;
     }
 
-    public int getWarehouseStock() {
-        return warehouseStock;
+    public String getNote() {
+        return note;
     }
 
-    public void setWarehouseStock(int warehouseStock) {
-        this.warehouseStock = warehouseStock;
+    public void setNote(String note) {
+        this.note = note;
     }
 
-    public List<MiniBarStockEntity> getMiniBarStocks() {
-        return miniBarStocks;
+    public List<MiniBarPurchaseEntity> getPurchases() {
+        return purchases;
     }
 
-    public void setMiniBarStocks(List<MiniBarStockEntity> miniBarStocks) {
-        this.miniBarStocks = miniBarStocks;
+    public void setPurchases(List<MiniBarPurchaseEntity> purchases) {
+        this.purchases = purchases;
+    }
+
+    public List<MiniBarUsageEntity> getUsages() {
+        return usages;
+    }
+
+    public void setUsages(List<MiniBarUsageEntity> usages) {
+        this.usages = usages;
     }
 }

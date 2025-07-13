@@ -21,7 +21,7 @@ public class RoomPrice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private String note;
     @ManyToOne
     @JoinColumn(name = "room_type_id", nullable = false)
     private RoomTypeEntity roomType;

@@ -21,7 +21,7 @@ public class RoomFeatureEntity {
 
     private String name;
     private String description;
-
+    private String note;
     @ManyToOne
     @JoinColumn(name = "room_id")
     private RoomEntity roomEntity;
