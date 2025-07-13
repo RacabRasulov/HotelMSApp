@@ -18,15 +18,18 @@ public class MiniBarItemService {
     public CreateMiniBarItemDtoResponse save(CreateMiniBarItemDtoRequest dtoRequest) {
         MiniBarItemEntity entity = new MiniBarItemEntity();
         entity.setName(dtoRequest.getName());
-
+        entity.setNote(dtoRequest.getNote());
         entity.setSalePrice(dtoRequest.getSalePrice());
 
-
         repository.save(entity);
-        CreateMiniBarItemDtoResponse response =new CreateMiniBarItemDtoResponse();
 
-        response.setId(entity.getId());
+        CreateMiniBarItemDtoResponse response = new CreateMiniBarItemDtoResponse();
+
         response.setName(entity.getName());
+        response.setNote(entity.getNote());
+        response.setSalePrice(entity.getSalePrice());
+        response.setAveragePurchasePrice(entity.getAveragePurchasePrice());
+
         return response;
 
     }

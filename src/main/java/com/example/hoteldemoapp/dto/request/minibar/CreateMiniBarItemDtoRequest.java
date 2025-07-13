@@ -15,9 +15,8 @@ import java.math.BigDecimal;
 public class CreateMiniBarItemDtoRequest {
 
     private String name;
-    private BigDecimal purchasePrice;
     private BigDecimal salePrice;
-    private int warehouseStock;
+    private String note;
 
     public String getName() {
         return name;
@@ -25,14 +24,6 @@ public class CreateMiniBarItemDtoRequest {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public BigDecimal getPurchasePrice() {
-        return purchasePrice;
-    }
-
-    public void setPurchasePrice(BigDecimal purchasePrice) {
-        this.purchasePrice = purchasePrice;
     }
 
     public BigDecimal getSalePrice() {
@@ -43,11 +34,11 @@ public class CreateMiniBarItemDtoRequest {
         this.salePrice = salePrice;
     }
 
-    public int getWarehouseStock() {
-        return warehouseStock;
+    public String getNote() {
+        return note;
     }
 
-    public void setWarehouseStock(int warehouseStock) {
-        this.warehouseStock = warehouseStock;
+    public void setNote(String note) {
+        this.note = note;
     }
 }
